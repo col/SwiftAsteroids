@@ -8,33 +8,77 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
-    override func didMoveToView(view: SKView) {
-        /* Setup your scene here */
-        let myLabel = SKLabelNode(fontNamed:"Chalkduster")
-        myLabel.text = "Hello, World!";
-        myLabel.fontSize = 65;
-        myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame));
-        
-        self.addChild(myLabel)
-    }
+struct ArrowKeys : OptionSetType {
+    let rawValue: Int
+    init(rawValue: Int) { self.rawValue = rawValue }
     
-    override func mouseDown(theEvent: NSEvent) {
-        /* Called when a mouse click occurs */
-        
-        let location = theEvent.locationInNode(self)
-        
-        let sprite = SKSpriteNode(imageNamed:"Spaceship")
-        sprite.position = location;
-        sprite.setScale(0.5)
-        
-        let action = SKAction.rotateByAngle(CGFloat(M_PI), duration:1)
-        sprite.runAction(SKAction.repeatActionForever(action))
-        
-        self.addChild(sprite)
+    static var None : ArrowKeys { return ArrowKeys(rawValue: 0) }
+    static var Up   : ArrowKeys { return ArrowKeys(rawValue: 1 << 0) }
+    static var Down : ArrowKeys { return ArrowKeys(rawValue: 1 << 1) }
+    static var Left : ArrowKeys { return ArrowKeys(rawValue: 1 << 2) }
+    static var Right: ArrowKeys { return ArrowKeys(rawValue: 1 << 3) }
+}
+
+class GameScene: SKScene {
+    
+    var player = Player()
+    var arrowKeys = ArrowKeys.None
+    var keyDownFlag = false
+    var previousFrameTime: CFTimeInterval?
+    
+    override func didMoveToView(view: SKView) {
+        player.node.position = CGPointMake(view.frame.width/2, view.frame.height/2)
+        self.addChild(player.node)
     }
     
     override func update(currentTime: CFTimeInterval) {
-        /* Called before each frame is rendered */
+        let timeDelta = CGFloat(currentTime - (previousFrameTime ?? currentTime))
+        
+        player.update(arrowKeys, timeDelta: timeDelta)
+        
+        previousFrameTime = currentTime
     }
+    
+    override func keyDown(event: NSEvent) {
+        keyDownFlag = true
+        interpretKeyEvents([event])
+    }
+    
+    override func keyUp(event: NSEvent) {
+        keyDownFlag = false
+        interpretKeyEvents([event])
+    }
+    
+    override func moveUp(sender: AnyObject?) {
+        if keyDownFlag {
+            arrowKeys.insert(.Up)
+        } else {
+            arrowKeys.remove(.Up)
+        }
+    }
+    
+    override func moveDown(sender: AnyObject?) {
+        if keyDownFlag {
+            arrowKeys.insert(.Down)
+        } else {
+            arrowKeys.remove(.Down)
+        }
+    }
+    
+    override func moveLeft(sender: AnyObject?) {
+        if keyDownFlag {
+            arrowKeys.insert(.Left)
+        } else {
+            arrowKeys.remove(.Left)
+        }
+    }
+
+    override func moveRight(sender: AnyObject?) {
+        if keyDownFlag {
+            arrowKeys.insert(.Right)
+        } else {
+            arrowKeys.remove(.Right)
+        }
+    }
+    
 }
