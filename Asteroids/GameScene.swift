@@ -36,7 +36,23 @@ class GameScene: SKScene {
         
         player.update(arrowKeys, timeDelta: timeDelta)
         
+        self.applyInfiniteScrollToNode(player.node, frame: self.frame)
+        
         previousFrameTime = currentTime
+    }
+    
+    func applyInfiniteScrollToNode(node: SKNode, frame: CGRect) {        
+        if node.position.x > self.frame.width {
+            node.position.x = 0
+        } else if node.position.x < 0 {
+            node.position.x = self.frame.width
+        }
+        
+        if node.position.y > self.frame.height {
+            node.position.y = 0
+        } else if node.position.y < 0 {
+            node.position.y = self.frame.height
+        }
     }
     
     override func keyDown(event: NSEvent) {
