@@ -15,6 +15,7 @@
 		EF4CA90E1B498A5C000015DE /* AsteroidsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4CA90D1B498A5C000015DE /* AsteroidsUITests.swift */; };
 		EF4CA91C1B498A9E000015DE /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4CA91B1B498A9E000015DE /* Player.swift */; };
 		EF4CA91E1B4AC07F000015DE /* CGPoint+Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4CA91D1B4AC07F000015DE /* CGPoint+Vector.swift */; };
+		EF4CA9201B4AD200000015DE /* Bullet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4CA91F1B4AD200000015DE /* Bullet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		EF4CA90F1B498A5C000015DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EF4CA91B1B498A9E000015DE /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		EF4CA91D1B4AC07F000015DE /* CGPoint+Vector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGPoint+Vector.swift"; sourceTree = "<group>"; };
+		EF4CA91F1B4AD200000015DE /* Bullet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bullet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				EF4CA8EE1B498A5C000015DE /* AppDelegate.swift */,
 				EF4CA8F01B498A5C000015DE /* GameScene.swift */,
 				EF4CA91B1B498A9E000015DE /* Player.swift */,
+				EF4CA91F1B4AD200000015DE /* Bullet.swift */,
 				EF4CA8F41B498A5C000015DE /* Assets.xcassets */,
 				EF4CA8F61B498A5C000015DE /* MainMenu.xib */,
 				EF4CA8F91B498A5C000015DE /* Info.plist */,
@@ -259,6 +262,7 @@
 			files = (
 				EF4CA8F11B498A5C000015DE /* GameScene.swift in Sources */,
 				EF4CA91E1B4AC07F000015DE /* CGPoint+Vector.swift in Sources */,
+				EF4CA9201B4AD200000015DE /* Bullet.swift in Sources */,
 				EF4CA91C1B498A9E000015DE /* Player.swift in Sources */,
 				EF4CA8EF1B498A5C000015DE /* AppDelegate.swift in Sources */,
 			);

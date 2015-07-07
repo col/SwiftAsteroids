@@ -17,11 +17,16 @@ struct ArrowKeys : OptionSetType {
     static var Down : ArrowKeys { return ArrowKeys(rawValue: 1 << 1) }
     static var Left : ArrowKeys { return ArrowKeys(rawValue: 1 << 2) }
     static var Right: ArrowKeys { return ArrowKeys(rawValue: 1 << 3) }
+    static var Space: ArrowKeys { return ArrowKeys(rawValue: 1 << 4) }
 }
 
 class GameScene: SKScene {
     
+    static let FireRate: Double = 0.17
+    
     var player = Player()
+    var bullets = [Bullet]()
+    var lastBulletFiredAt: CFTimeInterval?
     var arrowKeys = ArrowKeys.None
     var keyDownFlag = false
     var previousFrameTime: CFTimeInterval?
@@ -35,13 +40,28 @@ class GameScene: SKScene {
         let timeDelta = CGFloat(currentTime - (previousFrameTime ?? currentTime))
         
         player.update(arrowKeys, timeDelta: timeDelta)
+        applyInfiniteScrollToNode(player.node, frame: self.frame)
         
-        self.applyInfiniteScrollToNode(player.node, frame: self.frame)
+        if arrowKeys.contains(.Space) && currentTime - (lastBulletFiredAt ?? 0.0) > GameScene.FireRate {
+            fireBullet()
+            lastBulletFiredAt = currentTime
+        }
+        
+        for bullet in bullets {
+            bullet.update(timeDelta)
+            applyInfiniteScrollToNode(bullet.node, frame: self.frame)
+        }
         
         previousFrameTime = currentTime
     }
     
-    func applyInfiniteScrollToNode(node: SKNode, frame: CGRect) {        
+    func fireBullet() {
+        let bullet = Bullet(position: player.node.position, angle: player.rotation, velocity: player.velocity)
+        self.addChild(bullet.node)
+        bullets.append(bullet)
+    }
+    
+    func applyInfiniteScrollToNode(node: SKNode, frame: CGRect) {
         if node.position.x > self.frame.width {
             node.position.x = 0
         } else if node.position.x < 0 {
@@ -58,12 +78,35 @@ class GameScene: SKScene {
     override func keyDown(event: NSEvent) {
         keyDownFlag = true
         interpretKeyEvents([event])
+        handleKeyEvent(event, keyDown: true)
     }
     
     override func keyUp(event: NSEvent) {
         keyDownFlag = false
         interpretKeyEvents([event])
+        handleKeyEvent(event, keyDown: false)
     }
+    
+    func handleKeyEvent(event: NSEvent, keyDown: Bool) {
+        let characters = event.characters!
+        for character in characters.characters {
+            if character == " " {
+                if keyDown {
+                    arrowKeys.insert(.Space)
+                } else {
+                    arrowKeys.remove(.Space)
+                }
+            }
+        }        
+    }
+    
+//    override func insertText(insertString: AnyObject) {
+//        print("InsertTest '\(insertString)'")
+//        let string = insertString as! NSString
+//        if string == " " {
+//            fireBullet()
+//        }
+//    }
     
     override func moveUp(sender: AnyObject?) {
         if keyDownFlag {
